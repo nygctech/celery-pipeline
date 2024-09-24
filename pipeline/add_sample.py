@@ -415,7 +415,7 @@ def add_sample(
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Create a project and process the samples"
+        description="Adds Visium samples ran through Spaceranger to an existing project"
     )
     parser.add_argument(
         help="rid (role id) to assign to users and initalize data bucket if it does not exist.",

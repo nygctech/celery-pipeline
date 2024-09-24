@@ -3,9 +3,7 @@ import requests
 import config
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description="Create a project and process the samples"
-    )
+    parser = argparse.ArgumentParser(description="Creates a new Visium project")
     parser.add_argument(
         help="rid (role id) to assign to users and initalize data bucket if it does not exist.",
         dest="rid",
