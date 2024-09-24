@@ -12,7 +12,7 @@ Clone the repository into the current directory:
 $ git clone git@github.com:matthewse19/celery-pipeline.git
 ```
 
-Install the required Python packages:
+Install the required Python packages from an environment with Python>=3.9:
 
 ```
 $ pip install -r celery-pipeline/requirements.txt
