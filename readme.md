@@ -20,9 +20,9 @@ $ pip install -r celery-pipeline/requirements.txt
 
 # Adding new users
 
-Roles dictate which projects users may be added to, each project is associated with a particular role, and multiple projects may be associated with that role. To access a specific project however, a user must still be added to that project (see [Create Visium project](##Create-Visium-project))
+Roles dictate which projects users may be added to, each project is associated with a particular role, and multiple projects may be associated with that role. To access a specific project however, a user must still be added to that project (see [Create Visium project](#create-visium-project))
 
-A user may be added with a role from an existing user with that role (see [below](##Assigning-roles-to-new-and-existing-users)), or an admin may grant a new role to the user.
+A user may be added with a role from an existing user with that role (see [below](#assigning-roles-to-new-and-existing-users)), or an admin may grant a new role to the user.
 
 Notes on roles:
 - Roles are can be thought more so as "groups" as opposed to having certain permissions like admins vs users
