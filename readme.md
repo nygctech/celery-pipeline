@@ -9,7 +9,7 @@ This repository contains Python scripts which can be downloaded (see [Installati
 Clone the repository into the current directory:
 
 ```
-$ git clone git@github.com:matthewse19/celery-pipeline.git
+$ git clone git@github.com:nygctech/celery-pipeline.git
 ```
 
 Install the required Python packages from an environment with Python>=3.9:
