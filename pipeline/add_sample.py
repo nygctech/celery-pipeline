@@ -450,13 +450,7 @@ def main():
         dest="qc",
         action="store_true",
     )
-    parser.add_argument(
-        "-t",
-        "--token",
-        help="token of current user to use for authentication.",
-        dest="token",
-        required=True,
-    )
+
     parser.add_argument(
         "-f",
         "--fullres_paths",
@@ -484,6 +478,14 @@ def main():
         help="Path to existing annotations",
         dest="annotation_paths",
         nargs="+",
+    )
+
+    parser.add_argument(
+        "-t",
+        "--token",
+        help="token of current user to use for authentication.",
+        dest="token",
+        required=True,
     )
 
     args = parser.parse_args()
