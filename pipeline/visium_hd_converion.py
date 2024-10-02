@@ -82,7 +82,7 @@ def rebin_positions(positions, bin_size, in_tissue_pct=0.5):
     return new_tissue_positions
 
 
-def flood_fill_annotations(df):
+def flood_fill_annotations(df, distance_threshold):
     # city block style flood fill/expand from annotations on the outline of regions
 
     df = df.copy()
@@ -107,36 +107,60 @@ def flood_fill_annotations(df):
     border = ones & adjacent_to_zero
     border_row_col = np.where(border)
 
-    # list of already annotated, but on the border, spots
-    to_visit = deque([(r, c) for (r, c) in zip(border_row_col[0], border_row_col[1])])
-    visited = set()
-
     # index by rows and columns now
     df = df.set_index(["array_row", "array_col"])
+    df["reachable"] = [set() for _ in range(df.shape[0])]
+
+    # list of already annotated, but on the border, spots
+    # also list of how far away they are
+    # deque of tuples of ((r,c), distance, current singular aar)
+    to_visit = deque()
+    visited = {aar: set() for aar in df["AARs"].unique()}
+
+    for r, c in zip(border_row_col[0], border_row_col[1]):
+        aar = df.loc[(r, c), "AARs"]
+        d = 0
+        to_visit.append(((r, c), d, aar))
 
     # bfs/floodfill type algorithm
+    # Need to:
+    #  Keep track of (cityblock) distance from original region
+    #  Keep a list of all the regions that can reach each spot
+    #  Afterwards, if a spot can be reached by multiple regions, randomly pick one
     while len(to_visit) > 0:
-        r, c = to_visit.popleft()
+        ((r, c), d, aar) = to_visit.popleft()
 
-        # in case we've already visited
-        if (r, c) in visited:
+        # in case we've already visited this location with this aar
+        if (r, c) in visited[aar]:
             continue
         else:
-            visited.add((r, c))
-        current_aar = df.loc[(r, c), "AARs"]
+            visited[aar].add((r, c))
+
         neighbors = [(r + 1, c), (r - 1, c), (r, c + 1), (r, c - 1)]
 
-        # print(len(to_visit))
         for neighbor_r, neighbor_c in neighbors:
+            # check that the neighbor is in a valid area of the array
             if (neighbor_r, neighbor_c) not in df.index:
                 continue
 
             row = df.loc[(neighbor_r, neighbor_c)]
-            # set the aar annotation and add it
-            if row["in_tissue"] and row["AARs"] == "":
-                df.at[(neighbor_r, neighbor_c), "AARs"] = current_aar
-                to_visit.append((neighbor_r, neighbor_c))
 
+            # add if in_tissue and originally unannotated
+            if row["in_tissue"] and row["AARs"] == "":
+                # add current aar to the reachable set
+                df.at[(neighbor_r, neighbor_c), "reachable"].add(aar)
+
+                # don't append if it's at the max distance away (i.e. current d is less than threshold)
+                if d < distance_threshold:
+                    to_visit.append(((neighbor_r, neighbor_c), d + 1, aar))
+
+    # randomly choose reachable aars
+    for i, row in df.iterrows():
+        if len(row["reachable"]) == 0:
+            continue
+        random.seed(hash(row["barcode"]))
+        df.at[i, "AARs"] = random.choice(list(df.at[i, "reachable"]))
+    df = df.drop("reachable", axis=1)
     return df
 
 
@@ -181,6 +205,7 @@ def get_spatial_aar_df(
     scaling=1,
     bin_size=None,
     in_tissue_pct=0.5,
+    distance_threshold=32,
 ):
     if isinstance(positions, str):
         df = pd.read_parquet(positions)
@@ -209,7 +234,7 @@ def get_spatial_aar_df(
     df["AARs"] = df["pt"].apply(get_aar)
 
     print("Assigning unannotated spots to nearby contigous regions")
-    df = flood_fill_annotations(df)
+    df = flood_fill_annotations(df, distance_threshold)
     return df
 
 
@@ -230,6 +255,7 @@ def process_visium_data(
     save_parquet,
     xy_translation,
     scalefactor,
+    distance_threshold,
 ):
 
     bin_options = get_bin_options(spaceranger_path)
@@ -260,6 +286,7 @@ def process_visium_data(
         y_translation,
         scalefactor,
         target_bin_size,
+        distance_threshold=distance_threshold,
     )
     processed_df = processed_df.reset_index()
 
@@ -332,6 +359,13 @@ def main():
         default=1,
         help="Scale factor applied to annotations after translation (default 1)",
     )
+    parser.add_argument(
+        "--distance_threshold",
+        "-d",
+        type=int,
+        default=32,
+        help="Number of barcodes away (in target bin size) a blank spot must be from an annotated region to automatically carry-over nearby annotations (default 32).",
+    )
 
     args = parser.parse_args()
 
@@ -344,6 +378,7 @@ def main():
         args.save_parquet,
         args.xy_translation,
         args.scalefactor,
+        args.distance_threshold,
     )
 
 
