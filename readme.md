@@ -102,3 +102,35 @@ optional arguments:
 # Other project types
 
 An admin may need to initialize IF and HD projects. See the readme in the [Celery](https://github.com/mssanjavickovic/celery/) repository for further information on how to structure these projects.
+
+# HD Visium
+
+HD Visium projcets may be annotated in a similar method to other "HD" Celery projects. The fullres microscope image may be uploaded to an HD project (by an admin), and the user can created polygon-style annotations around regions. For best results, the microscope image should be cropped as much as possible before being aligned with Loupe Browser, which will make the image more manageable in Celery (the image may also be downsized again before being uploaded so that it doesn't take too long to load in the browser). 
+
+The annotations can be exported from Celery into a `.json` file, and converted to a csv with barcodes in one columns and AARs in another column. To do this, run:
+
+```
+$ python pipeline/visium_hd_conversion.py [sample spaceranger path] [json annotations] [target bin size] -t [token from Celery]
+```
+
+The full list of flags are their descriptions are:
+
+```
+positional arguments:
+  spaceranger_path      Path to the Spaceranger output files
+  annotation_path       Path to the json annotation file exported by Celery
+  target_bin_size       Target bin size, will automatically rebin if size does not exist
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --out_path OUT_PATH, -o OUT_PATH
+                        Path to csv file with barcodes and AARs (default "AARs.csv")
+  --save_parquet, -s    Save the rebinned data as a parquet file
+  --xy_translation x y, -t x y
+                        Translation applied to annotations in x and y directions (default 0 0)
+  --scalefactor SCALEFACTOR, -f SCALEFACTOR
+                        Scale factor applied to annotations after translation (default 1)
+  --distance_threshold DISTANCE_THRESHOLD, -d DISTANCE_THRESHOLD
+                        Number of barcodes away (in target bin size) a blank spot must be from an annotated region to
+                        automatically carry-over nearby annotations (default 32).
+```
