@@ -30,7 +30,7 @@ Notes on roles:
 - In some of the outputs of the scripts, roles may be referred to as "rid" (role ID)
 
 
-Currently, all users must use their @nygenome.org account to sign-in (this may be changed by an admin in the processSignUp Cloud Function).
+Currently, all users must use their @nygenome.org account to sign-in, or out of domain emails may be used as long as an admin has created a corresponding document in the `/users/` Firestore collection. Alternatively, out of domain users may be added by assigning that user to a role (see below).
 
 **Known bug:** After a user signs-up for the first time in Celery, they may need to wait a few minutes before their permissions (specifically roles) get propagated and updated correctly.  
 
