@@ -240,8 +240,8 @@ def get_spatial_aar_df(
 
 def get_bin_options(spaceranger_path):
     binned_dir = os.path.join(spaceranger_path, "outs/binned_outputs")
-
-    paths = [p for p in os.listdir(binned_dir) if p.startswith("square_")]
+    # the only existing ones should be square_002um  square_008um  square_016um, avoid any file, which is why check for a .
+    paths = [p for p in os.listdir(binned_dir) if p.startswith("square_") and "." not in p]  
     bins = [int(p.split("_")[-1].strip("um")) for p in paths]
 
     return bins
