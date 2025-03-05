@@ -265,9 +265,9 @@ def process_visium_data(
     ), f"Could not find any binned outputs in spaceranger path {spaceranger_path}"
 
     largest_divisible_bin = 0
-    for bin in bin_options:
-        if target_bin_size % bin == 0 and bin > largest_divisible_bin:
-            largest_divisible_bin = bin
+    for b in bin_options:
+        if target_bin_size % b == 0 and b > largest_divisible_bin:
+            largest_divisible_bin = b
 
     assert (
         largest_divisible_bin > 0
