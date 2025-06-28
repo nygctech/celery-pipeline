@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adding a sample</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/general.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/add_sample.css') }}"/>
+</head>
+<body>
+<h1>Adding a sample</h1>
+
+<form id="dynamicForm">
+    <!----------------------------------------------------------------------------------------------------------------->
+    <h2>Cloud info</h2>
+
+    <div class="form-group">
+        <div class="alone"> <label for="token">GCP token *:</label></div>
+        <p class="explanation"> It's the value you get by pressing "Get token" from the Celery app.
+            It allows us to authenticate ourselves and be recognized by the cloud. It resets every hour,
+            so if something doesn't work, refresh celery and copy it again </p>
+        <input type="text" size=80  id="token" name="token"  required>
+
+    </div>
+
+    <!----------------------------------------------------------------------------------------------------------------->
+    <h2>Samples info</h2>
+    <div class="rowcontainer">
+    <div class="form-group" style="width: 30%;">
+        <div class="alone"> <label for="projectName">Project name *:</label></div>
+        <p class="explanation"> Name of the project in Celery  </p>
+        <input type="text" id="projectName" name="name"  required>
+    </div>
+    <div class="form-group" style="width: 70%;">
+        <div class="alone"> <label for="rid">Project role id *:</label></div>
+        <p class="explanation">Roles to store data accordingly and semantically divide groups. They must exist in the database,
+            created by the admin. Examples are:
+            ['tech-inno', 'abc', 'CGND', '123', 'kco', 'ucanpv']
+        </p>
+        <input type="text" id="rid" name="rid"  required>
+
+    </div>
+    </div>
+
+    <div  class="form-group">
+        <div class="alone"> <label for="srdir">Path to spaceranger directories *:</label></div>
+        <p class="explanation"> Here we will list the specified directory in search for the samples to upload. Click on
+           "add to selected" to add the samples you wish to upload. An individual menu per sample will appear below.</p>
+
+        <p class="explanation"> In the individual sample menus you can select to upload an image, spaceranger data,
+            and selected genes for their expression to be visualized in Celery.</p>
+
+        <p class="explanation"> Use the third box to specify the full path to the location of the images, write one per
+            line, they should match the selected images in the second box. </p>
+
+        <input type="text" size=85 id="srdir" name="srdir" required>
+        <button id="listsrdir" type="button" class="btn btn-secondary removeExtra">List directory contents</button>
+        <div id="listcontainer">
+            <div class="list_and_button">
+                <select id="availableItems" size="15 "multiple> </select>
+                <button type="button" id="selectedAddBtn"> Add to Selected</button>
+            </div>
+            <div class="list_and_button">
+                <select id="selectedItems" size="15" multiple></select>
+                <button type="button" id="selectedRemoveBtn"> Remove from Selected</button>
+            </div>
+            <div class="list_and_button">
+                <textarea id="matchimglocs" rows="15" cols="50"></textarea>
+                <button type="button" id="copyimagelocsbtn"> Copy to matching image locations</button>
+            </div>
+        </div>
+    </div>
+    <div  class="form-group">
+        <div class="alone"> <label>Genes to save for visualization:</label></div>
+        <p class="explanation"> Write gene names, either separated by commas, or as a list, one per line.
+            These genes will be available for visualization in Celery. This is only available for Visium</p>
+        <p class="explanation"> You may want to limit the list to around 80. If it becomes a large file, Celery will
+            not be able to upload it, the maximum size is 30mb, which depends on the expression itself,
+            which is why there's not a limited number of allowed genes</p>
+        <p class="explanation"> For Celery to be able to read the genes we need a "tissue_positions.csv"
+            (or a legacy "tissue_positions_list.csv" file and
+             a "filtered_feature_bc_matrix.h5" file which can be searched for in each sample box below.</p>
+        <textarea id="genelist" rows="10" cols="100"></textarea>
+    </div>
+    <div  class="form-group">
+        <h3>Samples info</h3>
+        <div class="rowcontainer">
+            <button type="button" id="allaswsibtn"> All as WSI</button>
+            <button type="button" id="allasvisiumbtn"> All as Visium</button>
+            <button type="button" id="allasifbtn"> All as fluorescence</button>
+            <button type="button" id="fillallsrbtn"> Auto fill all SR fields</button>
+            <button type="button" id="collapseall"> Show all</button>
+        </div>
+        <div id="samplesinfo">
+
+        </div>
+    </div>
+</form>
+
+<h2 id="responseMessage"></h2>
+<pre id="responseData"></pre>
+</body>
+<script src="{{ url_for('static', filename='js/add_sample.js') }}"></script>
+</html>

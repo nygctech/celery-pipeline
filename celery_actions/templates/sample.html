@@ -1,0 +1,128 @@
+<div id="<BOXSAMPLEID>" class="inputsamplebox">
+  <label>Sample name  <a class="collapse">+</a> </label>
+  <div class="wholesamplecontainer ">
+
+    <div class="sampleboxconcept">
+      <div class="title"> Image data:</div>
+      <input type="text" size=80 class="pathtoimage" placeholder="Full path to image /nfs/commons/etc..." >
+      <div> Image type:</div>
+      <div class="rowcontainer">
+        <div class="radio-container">
+          <input type="radio" name="imagetype" value="wsi" id="wsi">
+          <div> Whole Slide Image</div>
+          <label for="wsi">
+            <img height="80" src="{{ url_for('static', filename='misc/WSI_ex.jpg') }}" alt ="wsi">
+          </label>
+        </div>
+        <div class="radio-container">
+          <input type="radio" name="imagetype" value="visium" id="visium">
+          <div> Visium</div>
+          <label for="visium">
+            <img src="{{ url_for('static', filename='misc/visium_ex.jpg') }}" alt ="visium">
+          </label>
+        </div>
+        <div class="radio-container">
+          <input type="radio" name="imagetype" value="ifc" id="ifc">
+          <div> Fluorescence</div>
+          <label for="ifc">
+            <img src="{{ url_for('static', filename='misc/IF_ex.jpg') }}" alt ="ifc">
+          </label>
+        </div>
+      </div>
+      <button type="button" class="uploadimage"> Upload image</button>
+    </div>
+    <div class="sampleboxconcept">
+      <div class="title"> Spaceranger data:</div>
+      <table class="filestable">
+        <tr>
+          <th>sr file</th>
+          <th>location</th>
+          <th>upload</th>
+          <th>remove</th>
+        </tr>
+        <tr>
+          <td><select class="srfile">
+            <option value="barcodes.tsv.gz" selected>barcodes.tsv.gz</option>
+            <option value="matrix.mtx.gz">matrix.mtx.gz</option>
+            <option value="features.tsv.gz">features.tsv.gz</option>
+            <option value="tissue_positions.csv">tissue_positions.csv</option>
+            <option value="scalefactors_json.json">scalefactors_json.json</option>
+            <option value="other">other</option>
+          </select></td>
+          <td><input type="text" class="srlocation"></td>
+          <td><input type="checkbox" class="srupload"></td>
+          <td><button type="button" class="removerow">x</button></td>
+        </tr>
+        <tr>
+          <td><select class="srfile">
+            <option value="barcodes.tsv.gz">barcodes.tsv.gz</option>
+            <option value="matrix.mtx.gz" selected>matrix.mtx.gz</option>
+            <option value="features.tsv.gz">features.tsv.gz</option>
+            <option value="tissue_positions.csv">tissue_positions.csv</option>
+            <option value="scalefactors_json.json">scalefactors_json.json</option>
+            <option value="other">other</option>
+          </select></td>
+          <td><input type="text" class="srlocation"></td>
+          <td><input type="checkbox" class="srupload"></td>
+          <td><button type="button" class="removerow">x</button></td>
+        </tr>
+        <tr>
+          <td><select class="srfile">
+            <option value="barcodes.tsv.gz">barcodes.tsv.gz</option>
+            <option value="matrix.mtx.gz">matrix.mtx.gz</option>
+            <option value="features.tsv.gz" selected>features.tsv.gz</option>
+            <option value="tissue_positions.csv">tissue_positions.csv</option>
+            <option value="scalefactors_json.json">scalefactors_json.json</option>
+            <option value="other">other</option>
+          </select></td>
+          <td><input type="text" class="srlocation"></td>
+          <td><input type="checkbox" class="srupload"></td>
+          <td><button type="button" class="removerow">x</button></td>
+        </tr>
+        <tr>
+          <td><select class="srfile">
+            <option value="barcodes.tsv.gz">barcodes.tsv.gz</option>
+            <option value="matrix.mtx.gz">matrix.mtx.gz</option>
+            <option value="features.tsv.gz">features.tsv.gz</option>
+            <option value="tissue_positions.csv"  selected>tissue_positions.csv</option>
+            <option value="scalefactors_json.json">scalefactors_json.json</option>
+            <option value="other">other</option>
+          </select></td>
+          <td><input type="text" class="srlocation"></td>
+          <td><input type="checkbox" class="srupload"></td>
+          <td><button type="button" class="removerow">x</button></td>
+        </tr>
+        <tr>
+          <td><select class="srfile">
+            <option value="barcodes.tsv.gz">barcodes.tsv.gz</option>
+            <option value="matrix.mtx.gz">matrix.mtx.gz</option>
+            <option value="features.tsv.gz">features.tsv.gz</option>
+            <option value="tissue_positions.csv">tissue_positions.csv</option>
+            <option value="scalefactors_json.json" selected>scalefactors_json.json</option>
+            <option value="other">other</option>
+          </select></td>
+          <td><input type="text" class="srlocation"></td>
+          <td><input type="checkbox" class="srupload"></td>
+          <td><button type="button" class="removerow">x</button></td>
+        </tr>
+      </table>
+      <div class="rowcontainer">
+        <button type="button" class="addsrbtn"> Add file</button>
+        <button type="button" class="srautofind"> Auto find</button>
+        <button type="button" class="sruploadall"> Upload all</button> <!-- changes to Upload none when clicked -->
+      </div>
+      <button type="button" class="uploadsr"> Upload Spaceranger data</button>
+    </div>
+
+
+    <div class="sampleboxconcept">
+      <div class="title"> Genes for visualization:</div>
+      <button type="button" class="autofindgene"> Auto find</button>
+      <div>Gene list, comma separated or by lines</div>
+      <textarea class="genelist" name="genelist" ></textarea>
+      <div>H5 gene filtered matrix location</div>
+      <input type="text" class="filteredmatrixloc>
+      <button type="button" class="uploadparquet"> Upload gene data</button>
+    </div>
+  </div>
+</div>

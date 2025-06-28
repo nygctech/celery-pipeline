@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adding a project</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/general.css') }}"/>
+</head>
+<body>
+<h1>Adding a project</h1>
+
+<form id="dynamicForm">
+    <h2>Cloud info</h2>
+    <div class="form-group">
+        <div class="alone"> <label for="rid">Cloud Address:</label></div>
+        <button type="button" id="toggleCloudAddress">Show Cloud Address</button>
+        <input type="text" id="cloudAddressInput" name="cloudAddress" value="https://us-central1-techinno.cloudfunctions.net/" class="hidden">
+        <details>
+            <summary>About  Cloud Address</summary>
+            <p>This is the GCP address for cloud run functions. No need to change it (unless it changes)</p>
+        </details>
+    </div>
+    <div class="form-group">
+        <div class="alone"> <label for="token">GCP token *:</label></div>
+        <input type="text" id="token" name="token"  required>
+        <details>
+            <summary>About  GCP Token</summary>
+            <p>Needed to authorize this action</p>
+        </details>
+    </div>
+    <h2>Project info</h2>
+    <div class="form-group">
+        <div class="alone"> <label for="name">Project name *:</label></div>
+        <input type="text" id="name" name="name"  required>
+        <details>
+            <summary>About  Project name</summary>
+            <p>Name of the project</p>
+        </details>
+    </div>
+    <div class="form-group">
+        <div class="alone"> <label for="rid">Project role id *:</label></div>
+        <input type="text" id="rid" name="rid"  required>
+        <details>
+            <summary>About  Project role id </summary>
+            <p>Roles to semantically divide groups. They must exist in the database, created by the admin. Examples are:
+                ['tech-inno', 'abc', 'CGND', '123', 'kco', 'ucanpv']
+            </p>
+        </details>
+    </div>
+    <div class="form-group">
+        <div class="alone"> <label for="emails">Emails (separated by semicolon ;):</label></div>
+        <textarea id="emails" name="emails" ></textarea>
+        <details>
+            <summary>About  Emails </summary>
+            <p>E-mails will get an nygenome.org appended unless it is an external email. External emails can be used, but make sure
+                they have already been added by an administrator. Press Create emails to add emails from the textarea.</p>
+        </details>
+        <button id="create_emails" type="button" class="btn btn-secondary removeExtra">Create emails</button>
+        <div id="emails_group">
+        </div>
+    </div>
+    <div class="form-group">
+        <h3>Classes for project</h3>
+            <div class="alone"> <label for="separator">Separator</label></div>
+            <input type="text" id="separator" name="sep" placeholder="," value="," maxlength="4" size="4">
+        <div>
+            <div class="alone"> <label for="classes">Classes *</label></div>
+            <textarea id="classes" name="classes" ></textarea>
+        </div>
+        <details>
+            <summary>About  Classes </summary>
+            <p> Projects have classes that relate to tissue types, cell types, or other meaningful biological taxonomy.
+                Add classes by writing them in the textarea separated by your separator of choice and clic on Create classes
+                to add them. Classes can't contain non-alphanumeric symbols or spaces.
+            </p>
+        </details>
+        <div>
+            <button id="create_classes" type="button" class="btn btn-secondary removeExtra">Create classes</button>
+            <div id="classes_group">
+
+
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="alone"> <label>Extra:</label></div>
+        <details>
+            <summary>About  Additional information </summary>
+            <p> If there's additional values you want to input such as being a visium project or an immunoflurescence project add it here:
+                for visium projects the "isVisium" boolean is required to be true. For IF the "isIF" boolean set to true is required.
+            </p>
+        </details>
+        <div id="extraContainer"></div>
+        <button type="button" id="addExtraBtn">Add Extra</button>
+    </div>
+
+    <details>
+        <summary>What happens when I submit?</summary>
+        <p> If everything is filled correctly and the token is valid then we will sen an automatic request to
+            GCP to create this project.
+            Emails may not be required but to access this project you need to add the corresponding emails.
+        </p>
+    </details>
+    <div class="form-group">
+        <input class="" type="submit" value="Submit">
+    </div>
+</form>
+
+<h2 id="responseMessage"></h2>
+<pre id="responseData"></pre>
+</body>
+<script src="{{ url_for('static', filename='js/add_project.js') }}"></script>
+</html>
