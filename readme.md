@@ -2,6 +2,16 @@
 
 This pipeline is designed to upload data from data sources (i.e. local machines, clusters, etc) to projects within the [Celery](https://techinno.firebaseapp.com/) webapp. 
 
+In the base you find a command line interface to do this by command line. It has limited functionality.
+
+In "celery_actions" there is a UI to have more felexibility and a visual interface to upload the data.
+
+# Instructions
+
+For information on the UI look in the "celery_actions" folder and the notion page: [UI upload utiliy](https://www.notion.so/nygc-innovation/Installation-of-Celery-data-upload-utility-220a1125aecb8012be60ef712f54cb37)
+
+For the CLI continue reading.
+
 This repository contains Python scripts which can be downloaded (see [Installation](#Installation)) and executed. Each script requires an additional `-t` flag followed by the user's current authentication token. This token can be copied to the user's clipboard by going to the Celery website (https://techinno.firebaseapp.com/) and pressing the "Get Token" button at the bottom.
 
 # Installation
