@@ -505,8 +505,17 @@ function fetchUploadImageToCloudRun(sampleid){
     }
 
     let option="option1"
-    if(document.getElementById("option2_"+sampleid).value===""){
+    if(document.getElementById("option2_"+sampleid).checked){
         option="option2"
+    }
+
+    let isIF =document.getElementById("isifccheck_"+sampleid).checked
+    let group=null;
+    let marker=null;
+
+    if(isIF){
+        group=document.getElementById('ifcmarkergroup_'+sampleid).value;
+        marker=document.getElementById('ifcmarker_'+sampleid).value;
     }
 
     let imagePath=""
@@ -521,14 +530,22 @@ function fetchUploadImageToCloudRun(sampleid){
         scale = getIdentifiedConvertedImageScale(sampleid);
     }
 
+
+
     const formData = {
         "token":token,
         "image_path":imagePath,
         "rid":rid,
         "sample":sampleid,
         "project":projectName,
-        "scale":scale,
+        "scale":scale
     };
+
+    if (isIF){
+        formData["is_IF"]=true;
+        formData["IF_group"]=group;
+        formData["IF_marker"]=marker;
+    }
 
     fetch('/upload_image', {
         method: 'POST',
@@ -799,6 +816,7 @@ function createDBConceptBox(sampleid){
 
 function _toggleMarkerHide(event){
     event.preventDefault();
+    let target=event.target;
     const parent_id=event.target.closest(".inputsamplebox").id.replace("box_","")
     const elem=document.getElementById("markerififcbox_"+parent_id)
     if (target.checked) {
@@ -943,11 +961,15 @@ function createImageConceptBox(sampleid){
     imc_isvisifcrow.appendChild(imc_isvisiumchecklabel);
 
     const imc_markerififc=make_element("div",{"id":"markerififcbox_"+sampleid,"class":"hidden"});
+    const imc_markergrouptitle=make_element("div",{"innerText":"Group"});
+    const imc_markergroupttext=make_element("input",{"type":"text", "style":"width:35%","id":"ifcmarkergroup_"+sampleid});
     const imc_markertitle=make_element("div",{"innerText":"Marker"});
-    const imc_markettext=make_element("input",{"type":"text", "style":"width:35%","id":"ifcmarker_"+sampleid});
+    const imc_markertext=make_element("input",{"type":"text", "style":"width:35%","id":"ifcmarker_"+sampleid});
 
+    imc_markerififc.appendChild(imc_markergrouptitle);
+    imc_markerififc.appendChild(imc_markergroupttext);
     imc_markerififc.appendChild(imc_markertitle);
-    imc_markerififc.appendChild(imc_markettext);
+    imc_markerififc.appendChild(imc_markertext);
 
     const imc_facconsole=make_element("p",{"class":"facconsole imgconsole","innerText":""});
 
@@ -1331,7 +1353,7 @@ function listenSamplesInfoButtons(){
 }
 
 function fillDummy() {
-    document.getElementById("srdir").value = "/commons/groups/vickovic_lab/crc/visium/spaceranger_outputs/2024-07-22_run/"
+    document.getElementById("srdir").value = "/home/leslie";//"/commons/groups/vickovic_lab/crc/visium/spaceranger_outputs/2024-07-22_run/"
     //document.getElementById("prefixpathimage").value = "/gpfs/commons/groups/vickovic_lab/gridnext/data/human_ba46/images/ccast_removed/V087_V10S15-032-A1.jpg"
     document.getElementById("projectName").value="exampleproject";
     document.getElementById("rid").value="CGND";
