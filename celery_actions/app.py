@@ -822,6 +822,91 @@ def upload_spot_info():
 
     return jsonify( request_json ), response.status_code
 
+def upload_IF_image(json_data):
+    cloud_address="https://add-if-image-142858704207.us-central1.run.app"
+
+    error_messages={
+        "token":  "Token is needed to authenticate request.",
+        "project" :  "Project name is needed.",
+        "sample":"We need a sample name",
+        "rid"  :  "We need a role.",
+        "image_path": "A local path for the image is needed.",
+        "scale": "A scale is needed even if it is 1.0",
+        "IF_group":"A group is needed for fluorescence images",
+        "IF_marker":"A marker is needed for a fluorescence image"
+    }
+
+    missing=[error_messages[i] for i in error_messages if i not in json_data]
+
+    if len(missing)>0:
+        request_json={}
+        request_json["message"]="".join(missing)
+        request_json["error"]="Error during request for image upload"
+        return jsonify( request_json ), 400
+
+    token=json_data["token"]
+    image_path=json_data["image_path"]
+    rid=json_data["rid"]
+    name=json_data["sample"]
+    project_id=json_data["project"]
+    scale=json_data["scale"]
+    group=json_data["IF_group"]
+    marker=json_data["IF_marker"]
+
+    if group=="":
+        missing.append("A valid group is needed for fluorescence images")
+        request_json={}
+        request_json["message"]="".join(missing)
+        request_json["error"]="Error during request for fluorescence image upload"
+        return jsonify( request_json ), 400
+
+    if marker=="":
+        missing.append("A valid marker is needed for a fluorescence image")
+        request_json={}
+        request_json["message"]="".join(missing)
+        request_json["error"]="Error during request for fluorescence image upload"
+        return jsonify( request_json ), 400
+
+    img_extension=image_path.split(os.sep)[-1].split(".")[-1]
+
+    print(f"sending this to google add_sample_image?rid={rid}&project_id={project_id}&sample={name}&img_extension={img_extension}&scale_f={scale}" )
+
+    binary_data = None
+    with open(image_path, "rb") as f:
+        binary_data = f.read()
+
+    headers = {
+        "Content-Type": "Content-Type: multipart/form-data",
+        "Authorization": f"bearer {token}",
+    }
+
+    request_json = {
+        "rid": json_data["rid"],
+        "project_id": json_data["project"],
+        "sample": json_data["sample"],
+        "if_group": json_data["if_group"],
+        "if_marker":json_data["if_marker"],
+        "xy_barcode": {},
+        "img_extension":img_extension,
+        "scale_f":scale
+    }
+
+    response = requests.post(
+        cloud_address
+        + f"add_if_sample_image",
+        headers=headers,
+        data=binary_data,
+        json=request_json
+        )
+
+    print(response.text)
+    #print(dir(response))
+
+    request_json={}
+
+    request_json["message"]=response.text
+
+    return jsonify( request_json ), response.status_code
 
 @app.route('/upload_image', methods=['POST'])
 def upload_image():
@@ -830,6 +915,12 @@ def upload_image():
         return jsonify({"error": "Request is not json formatted"}), 400
 
     json_data=request.json
+
+    if "is_IF" in json_data:
+        if json_data["is_IF"]:
+            upload_IF_image(json_data)
+        else:
+            print("is_IF is in the payload but it is false, continue as non fluorescence")
 
     cloud_address=CLOUD_ADDRESS
     error_messages={
