@@ -38,6 +38,30 @@
             <p>Name of the project</p>
         </details>
     </div>
+    <div class="form-group"  style="width: 70%;">
+        <div class="alone"> <label for="name">Project type *:</label></div>
+        <div class="rowcontainer">
+            <div>
+                <input type="radio" id="isVisium" name="drone" value="isVisium" checked />
+                <label for="isVisium">Visium style </label>  <p> This type is to show data from Visium arrays. It is made to be able to annotate Visium spots. It can display any type of image. If your image is fluorescent with different channels it will attempt to create a composite view.</p>
+            </div>
+
+            <div>
+                <input type="radio" id="isIF" name="drone" value="isIF" />
+                <label for="isIF">Fluorescence with multiple image layers</label> <p>  This type allows multiple fluorescence channels per sample whose contrast and brightness can be changed. This type, however, does NOT work for Visium annotation, only region annotations. If you want to annotate Visium spots, please use the "Visium style" option. Images for this type of project expect a group (or cycle) and a marker for each image.</p>
+            </div>
+
+            <div>
+                <input type="radio" id="isHD" name="drone" value="isHD" />
+                <label for="isHD">Visium HD</label> <p> This type is good for uploading a single higher resolution image per sample like the ones accompanying VisiumHD. It will only allow for region annotations.</p>
+            </div>
+    </div>
+
+        <details>
+            <summary>About  Project type:</summary>
+            <p>This option will be important for the functionality and the data that you upload. Visium can work for H&E and Fluorescence images alike, they will not be separated into channels. </br> </br> If you want them separatated by channels you will need to select the "Fluorescence with multiple image layers" option and then upload several images per group and marker as you desire. All images can be in a single group.</p>
+        </details>
+    </div>
     <div class="form-group">
         <div class="alone"> <label for="rid">Project role id *:</label></div>
         <input type="text" id="rid" name="rid"  required>

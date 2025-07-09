@@ -142,3 +142,6 @@ doc/dist
 # IDE files
 .idea
 .vscode
+celery_actions/static/misc/IF_ex.jpg
+celery_actions/static/misc/visium_ex.jpg
+celery_actions/static/misc/WSI_ex.jpg
