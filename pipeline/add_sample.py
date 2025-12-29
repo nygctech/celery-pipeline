@@ -85,10 +85,13 @@ def get_sample_metadata(sample_path):
     scale_factors_path = os.path.join(
         sample_path, "outs/spatial/scalefactors_json.json"
     )
-    scale_factors_dict = {}
+    scale_factors_dict = {"spot_diameter_fullres":150,"tissue_hires_scalef":0.5}
 
-    with open(scale_factors_path, "r") as f:
-        scale_factors_dict = json.load(f)
+    if os.path.exists(scale_factors_path):
+        with open(scale_factors_path, "r") as f:
+            scale_factors_dict = json.load(f)
+    else:
+        print("Scale factors file is not available, resorting to defaults:",str(scale_factors_dict))
 
     return scale_factors_dict.get("spot_diameter_fullres", 0), scale_factors_dict.get(
         "tissue_hires_scalef", 0
